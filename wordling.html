@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play unlimited Wordle games online. Challenge your vocabulary with 4, 5, and 6-letter puzzles. Daily challenges and multi-language support.">
+    <meta name="keywords" content="Wordle, Wordle game, online word puzzle, play Wordle, word guessing game, word game for kids, daily word challenge, Wordle in different languages, Wordle solver, wordly">
+    <link rel="canonical" href="https://wordling.org/">
+    <title>Wordling - Play Unlimited Wordle Puzzles Online</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔠</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'apple-blue': '#0071e3',
+                        'apple-light': '#f5f5f7',
+                        'apple-dark': '#1d1d1f',
+                        'apple-gray': '#86868b',
+                        'wordle-green': '#6aaa64',
+                        'wordle-yellow': '#c9b458'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            color: #1d1d1f;
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            background: linear-gradient(90deg, #0071e3 0%, #6aaa64 50%, #c9b458 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .game-container {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .game-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-apple {
+            transition: all 0.2s ease;
+            border-radius: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+        
+        .btn-apple:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 113, 227, 0.3);
+        }
+        
+        .btn-apple:active {
+            transform: scale(0.98);
+        }
+        
+        .app-badge {
+            transition: all 0.3s ease;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        
+        .app-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .letter-box {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            margin: 4px;
+            font-size: 24px;
+            font-weight: 700;
+            border: 2px solid #d8d8dc;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .letter-box.correct {
+            background-color: #6aaa64;
+            color: white;
+            border-color: #6aaa64;
+        }
+        
+        .letter-box.present {
+            background-color: #c9b458;
+            color: white;
+            border-color: #c9b458;
+        }
+        
+        .letter-box.absent {
+            background-color: #787c7e;
+            color: white;
+            border-color: #787c7e;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(0, 113, 227, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 113, 227, 0); }
+        }
+        
+        @media (max-width: 768px) {
+            .letter-box {
+                width: 32px;
+                height: 32px;
+                font-size: 20px;
+            }
+            
+            .game-container {
+                border-radius: 16px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md py-4 px-6 shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-3xl mr-2">🔠</div>
+                <h1 class="text-2xl md:text-3xl font-bold">
+                    <span class="logo-text">Wordling</span>
+                </h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#features" class="text-gray-700 hover:text-apple-blue font-medium">Features</a>
+                <a href="#play" class="text-gray-700 hover:text-apple-blue font-medium">Play Online</a>
+                <a href="#download" class="text-gray-700 hover:text-apple-blue font-medium">Download</a>
+            </nav>
+            <button class="md:hidden text-gray-700">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <section class="py-12 md:py-20 px-4">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-apple-dark">
+                    Play Unlimited <span class="logo-text">Wordle</span> - Fun and Challenge Await!
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+                    Wordling is a brain-teasing word game where you guess hidden words in four, five, or six-letter challenges. 
+                    With daily puzzles, unlimited mode, and varying difficulty levels, you'll sharpen your vocabulary, test your logic, 
+                    and enjoy a relaxing mental break. Challenge yourself or friends and master each clue, one letter at a time.
+                </p>
+                
+                <div class="flex justify-center space-x-4 mb-16">
+                    <span class="letter-box correct">W</span>
+                    <span class="letter-box">O</span>
+                    <span class="letter-box present">R</span>
+                    <span class="letter-box">D</span>
+                    <span class="letter-box absent">L</span>
+                    <span class="letter-box">E</span>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-6 max-w-3xl mx-auto">
+                    <div class="feature-card bg-white p-6 w-full md:w-64">
+                        <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-sync text-apple-blue text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2">Unlimited Play</h3>
+                        <p class="text-gray-600">Play as many games as you want with no restrictions</p>
+                    </div>
+                    
+                    <div class="feature-card bg-white p-6 w-full md:w-64">
+                        <div class="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-globe text-wordle-green text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2">Multi-language</h3>
+                        <p class="text-gray-600">Play in English, Spanish, French, German and more</p>
+                    </div>
+                    
+                    <div class="feature-card bg-white p-6 w-full md:w-64">
+                        <div class="w-14 h-14 rounded-xl bg-yellow-50 flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-child text-wordle-yellow text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2">Kid-Friendly</h3>
+                        <p class="text-gray-600">Special mode for kids with simpler words</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Section -->
+        <section id="play" class="py-12 bg-apple-light px-4">
+            <div class="container mx-auto max-w-6xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-apple-dark">Play Wordling Online</h2>
+                <p class="text-gray-600 text-center max-w-2xl mx-auto mb-10">
+                    Play directly in your browser - no downloads required. Try to guess the hidden word in 6 attempts!
+                </p>
+                
+                <div class="game-container bg-white max-w-4xl mx-auto">
+                    <div class="bg-apple-blue text-white py-3 px-6 flex justify-between items-center">
+                        <div class="font-medium">Wordling - Guess the Word</div>
+                        <div class="flex space-x-2">
+                            <button class="p-1 rounded hover:bg-blue-400">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="aspect-video">
+                        <iframe 
+                            src="https://games.crazygames.com/en_US/wordling/index.html" 
+                            class="w-full h-full"
+                            allow="fullscreen"
+                            allowfullscreen
+                            title="Wordling Online Game"
+                        ></iframe>
+                    </div>
+                </div>
+                
+                <div class="max-w-4xl mx-auto mt-8">
+                    <h3 class="text-xl font-semibold mb-4">How to Play:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-xl p-4">
+                            <div class="flex justify-center mb-3">
+                                <span class="letter-box correct">W</span>
+                                <span class="letter-box">O</span>
+                                <span class="letter-box">R</span>
+                                <span class="letter-box">D</span>
+                                <span class="letter-box">S</span>
+                            </div>
+                            <p class="text-gray-600 text-center"><span class="font-semibold text-wordle-green">Green</span> means correct letter in correct position</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-4">
+                            <div class="flex justify-center mb-3">
+                                <span class="letter-box">S</span>
+                                <span class="letter-box present">T</span>
+                                <span class="letter-box">O</span>
+                                <span class="letter-box">R</span>
+                                <span class="letter-box">M</span>
+                            </div>
+                            <p class="text-gray-600 text-center"><span class="font-semibold text-wordle-yellow">Yellow</span> means correct letter in wrong position</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-4">
+                            <div class="flex justify-center mb-3">
+                                <span class="letter-box">B</span>
+                                <span class="letter-box">R</span>
+                                <span class="letter-box">A</span>
+                                <span class="letter-box">V</span>
+                                <span class="letter-box absent">E</span>
+                            </div>
+                            <p class="text-gray-600 text-center"><span class="font-semibold text-gray-600">Gray</span> means letter not in the word</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="download" class="py-16 px-4">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-apple-dark">Download Wordling App</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mb-10">
+                    Take the Wordling challenge with you wherever you go! Download our app for the best experience with daily challenges, 
+                    statistics tracking, and offline play.
+                </p>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 max-w-3xl mx-auto">
+                    <a href="https://play.google.com/store/apps/details?id=io.digitalsnacks.wordchallenge" 
+                       target="_blank" 
+                       rel="noopener"
+                       class="app-badge w-full max-w-xs">
+                        <div class="bg-black rounded-2xl p-5 flex items-center">
+                            <div class="text-4xl mr-4 text-green-400">
+                                <i class="fab fa-android"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-gray-400 text-sm">GET IT ON</div>
+                                <div class="text-white text-2xl font-bold">Google Play</div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://apps.apple.com/ch/app/wordling-5-letter-puzzle/id1632444218?l=en-GB" 
+                       target="_blank" 
+                       rel="noopener"
+                       class="app-badge w-full max-w-xs">
+                        <div class="bg-black rounded-2xl p-5 flex items-center">
+                            <div class="text-4xl mr-4 text-white">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-gray-400 text-sm">Download on the</div>
+                                <div class="text-white text-2xl font-bold">App Store</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <h3 class="text-2xl font-bold mb-8">Why players love Wordling:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                        <div class="bg-white rounded-xl p-6">
+                            <div class="flex items-start mb-3">
+                                <div class="text-yellow-400 mr-3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="font-semibold">Amazing game!</div>
+                            </div>
+                            <p class="text-gray-600">"I play Wordling every morning with my coffee. The daily challenge keeps me coming back. Highly recommend!"</p>
+                            <div class="mt-3 text-gray-500">- Sarah M.</div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-6">
+                            <div class="flex items-start mb-3">
+                                <div class="text-yellow-400 mr-3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="font-semibold">Great for kids</div>
+                            </div>
+                            <p class="text-gray-600">"My 10-year-old loves the kids mode. It's educational and fun - perfect for expanding vocabulary!"</p>
+                            <div class="mt-3 text-gray-500">- David T.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-apple-dark text-white py-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">
+                        <span class="logo-text">Wordling</span>
+                    </h3>
+                    <p class="text-gray-400">The ultimate word puzzle challenge. Sharpen your mind one word at a time.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-gray-300">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white">Features</a></li>
+                        <li><a href="#play" class="text-gray-400 hover:text-white">Play Online</a></li>
+                        <li><a href="#download" class="text-gray-400 hover:text-white">Download</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-gray-300">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-gray-300">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-400">Subscribe to our newsletter</p>
+                        <div class="mt-2 flex">
+                            <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l text-gray-800 w-full">
+                            <button class="bg-apple-blue px-4 rounded-r font-medium">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500">
+                <p>&copy; 2023 Wordling.org. All rights reserved. Wordle is a trademark of The New York Times Company. This site is not affiliated.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
